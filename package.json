@@ -1,0 +1,24 @@
+{
+  "name": "wss",
+  "version": "1.0.0",
+  "description": "Weighing scale service which converts COM serial port communication into an API.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stalingino/WeighingScaleService.git"
+  },
+  "author": "Stalin Gino",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stalingino/WeighingScaleService/issues"
+  },
+  "homepage": "https://github.com/stalingino/WeighingScaleService#readme",
+  "dependencies": {
+    "ffi": "^2.3.0",
+    "inquirer": "^7.1.0",
+    "serialport": "^9.0.0"
+  }
+}

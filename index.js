@@ -1,13 +1,30 @@
 const http = require('http')
+const SerialPort = require('serialport')
 var inquirer = require('inquirer')
-inquirer.prompt({
-    
+
+// config
+var httpPort = 3003
+var vendor = 'essae'
+var availablePorts = null
+var config = {
+    serialPortName: null
+}
+
+SerialPort.list().then((portMeta) => {
+    availablePorts = portMeta
+    inquirer.prompt({
+        type: 'list',
+        name: 'serialPortName',
+        message: 'Weighing scale serial port:',
+        default: availablePorts[0].path,
+        choices: availablePorts.map(p => { return {name: p.path} })
+    }).then(result => {
+        config.serialPortName = result.serialPortName
+        console.log('WSS server running on http://127.0.0.1:'+httpPort)
+    })
 })
 
-
-var vendor = 'essae'
-const wsDevice = require('./'+vendor+'/index.js')
-
+const wsDevice = require('./'+vendor+'/index.js')(config)
 function getWeight() {
     return { weight: wsDevice.getWeight() }
 }
@@ -23,8 +40,7 @@ http.createServer((req, res) => {
             writeJson(getWeight())
             break;
         default:
-            writeJson({"error": "No valid operation performed"})
+            writeJson({"message": "Weighing scale connected on serial port: " + config.serialPortName})
     }
     res.end()
-}).listen(3003, '127.0.0.1')
-console.log('WSS server running on 127.0.0.1:3003')
+}).listen(httpPort, '127.0.0.1')
